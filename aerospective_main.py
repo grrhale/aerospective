@@ -11,6 +11,7 @@ import api_module as am
 user_zip = input(f'Please enter your zipcode (#####): ')
 
 latlong = am.get_location(user_zip)
+print(latlong)
 print(am.zip_square(latlong[0], latlong[1]))
 
 test_f_input = am.zip_square(latlong[0], latlong[1])
