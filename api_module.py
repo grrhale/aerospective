@@ -22,15 +22,15 @@ def zip_square(latitude, longitude):
 	longmin = longitude
 
 	if latmin > 0:
-		latmax = (latitude + .4000)
+		latmax = (latitude - .2500)
 	elif latmin <= 0:
-		latmax = (latitude + .4000)
+		latmax = (latitude - .1500)
 	else: exit()
 
 	if longmin > 0:
-		longmax = (longitude - .4000)
+		longmax = (longitude - .2500)
 	elif longmin <= 0:
-		longmax = (longitude - .4000)
+		longmax = (longitude - .2500)
 	else: exit()
 
 	return(longmax,latmax,longmin,latmin)
@@ -46,7 +46,7 @@ def AirNow_pull(longmax, latmax, longmin, latmin):
 	params = {'startDate':str(startdate)+'T00',
 	'endDate':str(enddate)+'T00',
 	'parameters':'PM25',
-	'BBOX':full_coords,
+	'BBOX':str(full_coords)[1:-1],
 	'dataType':'A',
 	'format':str('application/json'),
 	'verbose':0,
@@ -57,17 +57,10 @@ def AirNow_pull(longmax, latmax, longmin, latmin):
 	#API_resp = re.get(url)
 	#data = API_resp.text
 	#parse_json = json.loads(data)
-	return(url+urllib.parse.urlencode(params, safe='/'))
+	url_parsed = url+urllib.parse.urlencode(params, safe='/,')
+	
+	transl_table = dict.fromkeys(map(ord, '+'), None)
+	url_parsed_ready = url_parsed.translate(transl_table)
+	
+	return(url_parsed_ready)
 	#air_qual_data = pd.json_normalize(parse_json['data'])
-
-
-# airnow API pull example: 
-# https://www.airnowapi.org/aq/data/?startDate=2023-01-01T00&endDate=2023-07-19T00&parameters=PM25&BBOX=-86.2405,37.7174,-85.7404,38.2174&dataType=A&format=application/json&verbose=0&monitorType=0&includerawconcentrations=0&API_KEY=
-
-"""
-import urllib.parse
-url = 'https://example.com/somepage/?'
-params = {'var1': 'some data', 'var2': 1337}
-print(url + urllib.parse.urlencode(params))
-https://example.com/somepage/?var1=some+data&var2=1337
-"""
