@@ -21,17 +21,8 @@ def zip_square(latitude, longitude):
 	latmin = latitude
 	longmin = longitude
 
-	if latmin > 0:
-		latmax = (latitude - .2500)
-	elif latmin <= 0:
-		latmax = (latitude - .1500)
-	else: exit()
-
-	if longmin > 0:
-		longmax = (longitude - .2500)
-	elif longmin <= 0:
-		longmax = (longitude - .2500)
-	else: exit()
+	latmax = (latitude - .2500)
+	longmax = (longitude - .2500)
 
 	return(longmax,latmax,longmin,latmin)
 
@@ -62,5 +53,13 @@ def AirNow_pull(longmax, latmax, longmin, latmin):
 	transl_table = dict.fromkeys(map(ord, '+'), None)
 	url_parsed_ready = url_parsed.translate(transl_table)
 	
-	return(url_parsed_ready)
+	API_resp = re.get(url_parsed_ready)
+	AirNow_data = API_resp.text
+	parse_json = json.loads(AirNow_data)
+
+	zip_air_data = pd.json_normalize(parse_json[0:])
+
+	df = pd.DataFrame.from_dict(zip_air_data)
+	
+	return(df)
 	#air_qual_data = pd.json_normalize(parse_json['data'])
