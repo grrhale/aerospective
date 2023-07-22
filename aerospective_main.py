@@ -17,9 +17,9 @@ print(am.zip_square(latlong[0], latlong[1]))
 
 test_f_input = am.zip_square(latlong[0], latlong[1])
 
-test_date_print = am.AirNow_pull(test_f_input[0], 
+AirNow_data = am.AirNow_pull(test_f_input[0], 
 	test_f_input[1], 
 	test_f_input[2], 
 	test_f_input[3])
 
-print(test_date_print)
+print(AirNow_data)

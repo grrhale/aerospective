@@ -4,34 +4,37 @@ import urllib.parse
 import requests as re
 import json
 import pandas as pd
-from datetime import date
-from datetime import datetime
+import datetime
+import dateutil.relativedelta
 
 # function to convert zipcode to coordinates
 def get_location(zipcode):
 	nomi = pgeocode.Nominatim('us')
 	a = nomi.query_postal_code(zipcode)
-	lati = a['latitude']
-	longi = a['longitude']
-	return(lati, longi)
+	latitude = a['latitude']
+	longitude = a['longitude']
+	return(latitude, longitude)
 
 # function to convert coordinates from zipcode to a second set of latlongs,
 # bounding an area of the zipcode location which can be fed to the AirNow API
 def zip_square(latitude, longitude):
-	latmin = latitude
-	longmin = longitude
+	latmax = (latitude + .5)
+	longmax = (longitude + .5)
+	
+	latmin = (latitude - .5)
+	longmin = (longitude - .5)
 
-	latmax = (latitude - .2500)
-	longmax = (longitude - .2500)
+	return(longmin,latmin,longmax,latmax)
 
-	return(longmax,latmax,longmin,latmin)
+# function to pull air quality data for the past three months from the 
+# AirNow API
+def AirNow_pull(longmin, latmin, longmax, latmax):
 
-# function to pull air quality data for the year from the AirNow API
-def AirNow_pull(longmax, latmax, longmin, latmin):
-	full_coords = [round(longmax, 4), round(latmax, 4), round(longmin, 4), round(latmin, 4)]
+	full_coords = [round(longmin, 4), round(latmin, 4), round(longmax, 4), round(latmax, 4)]
 	print(full_coords)
-	enddate = date.today()
-	startdate = datetime.now().date().replace(month=1, day=1)
+	
+	enddate = datetime.datetime.now().date()
+	startdate = enddate + dateutil.relativedelta.relativedelta(months=-3)
 	
 	url = 'https://www.airnowapi.org/aq/data/?'
 	params = {'startDate':str(startdate)+'T00',
@@ -44,14 +47,12 @@ def AirNow_pull(longmax, latmax, longmin, latmin):
 	'monitorType':0,
 	'includerawconcentrations':0,
 	'API_KEY':config.API_key}
-
-	#API_resp = re.get(url)
-	#data = API_resp.text
-	#parse_json = json.loads(data)
+	
 	url_parsed = url+urllib.parse.urlencode(params, safe='/,')
 	
 	transl_table = dict.fromkeys(map(ord, '+'), None)
 	url_parsed_ready = url_parsed.translate(transl_table)
+	print(url_parsed_ready)
 	
 	API_resp = re.get(url_parsed_ready)
 	AirNow_data = API_resp.text
@@ -62,4 +63,3 @@ def AirNow_pull(longmax, latmax, longmin, latmin):
 	df = pd.DataFrame.from_dict(zip_air_data)
 	
 	return(df)
-	#air_qual_data = pd.json_normalize(parse_json['data'])
