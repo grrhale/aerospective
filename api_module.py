@@ -7,7 +7,10 @@ import pandas as pd
 import datetime
 import dateutil.relativedelta
 
-enddate = datetime.datetime.now().date()
+# setting enddate (most recent date reported) and startdate (date 3 months previous)
+# data is limited due to API limitations - temperatures for the immediate previous
+# seven days are not included in the Open Meteo API
+enddate = datetime.datetime.now().date() + dateutil.relativedelta.relativedelta(days=-7)
 startdate = enddate + dateutil.relativedelta.relativedelta(months=-3)
 
 # function to convert zipcode to coordinates (takes zip, returns coords)

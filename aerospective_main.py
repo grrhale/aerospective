@@ -9,9 +9,9 @@
 
 import pandas as pd
 import seaborn as sns
+import matplotlib.pyplot as plt
 import api_module as am
 import data_module as dm
-import csv
 
 # Ask user for area they want data for (zipcode in 5 digit format) 
 user_zip = input(f'Please enter your zipcode (#####): ')
@@ -43,5 +43,8 @@ airqual_data = dm.airqual_data_clean(AirNow_data)
 # Merge OpenMeteo and AirNow data
 df_aerospective = weather_data.merge(airqual_data, left_on='UTC', right_on='UTC')
 
+# Visualize our data
 print(df_aerospective)
-
+chart = sns.barplot(x='UTC', y='AQI', data=df_aerospective.reset_index())
+chart.set_xticklabels(chart.get_xticklabels(), rotation=90, fontsize=10, horizontalalignment='right')
+plt.show()

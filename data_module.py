@@ -1,6 +1,4 @@
 import pandas as pd
-import datetime
-import dateutil.relativedelta
 
 # function to clean weather data and narrow it to day by day mean
 # temperature, rather than hour by hour temperature readings
