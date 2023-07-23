@@ -11,11 +11,11 @@ def weather_data_clean(dataframe1, dataframe2):
 	temp_df = pd.DataFrame(temp_list)
 
 	weather_dataframe = pd.concat([date_df, temp_df], axis=1)
-	weather_dataframe.columns=['UTC', 'Temperature(°F)']
+	weather_dataframe.columns=['Date', 'Temperature(°F)']
 	
-	weather_dataframe['UTC'] = weather_dataframe.apply(lambda x:
-		x['UTC'][:-6], axis = 1)
-	weather_dataframe = weather_dataframe.groupby(['UTC']).mean()
+	weather_dataframe['Date'] = weather_dataframe.apply(lambda x:
+		x['Date'][:-6], axis = 1)
+	weather_dataframe = weather_dataframe.groupby(['Date']).mean()
 	
 	return(weather_dataframe)
 
@@ -32,8 +32,9 @@ def airqual_data_clean(dataframe):
 	AQI_PM25_df = pd.DataFrame(AQI_PM25_list)
 	
 	airqual_dataframe = pd.concat([date_df, AQI_PM25_df], axis=1)
-	airqual_dataframe['UTC'] = airqual_dataframe.apply(lambda x:
-		x['UTC'][:-6], axis = 1)
-	airqual_dataframe = airqual_dataframe.groupby(['UTC']).mean()
+	airqual_dataframe.columns=['Date', 'AQI']
+	airqual_dataframe['Date'] = airqual_dataframe.apply(lambda x:
+		x['Date'][:-6], axis = 1)
+	airqual_dataframe = airqual_dataframe.groupby(['Date']).mean()
 	
 	return(airqual_dataframe)

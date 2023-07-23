@@ -14,11 +14,19 @@ enddate = datetime.datetime.now().date() + dateutil.relativedelta.relativedelta(
 startdate = enddate + dateutil.relativedelta.relativedelta(months=-3)
 
 # function to convert zipcode to coordinates (takes zip, returns coords)
+# also checks if zipcode fits required parameters (is a 5 digit number)
 def get_location(zipcode):
-	nomi = pgeocode.Nominatim('us')
-	a = nomi.query_postal_code(zipcode)
-	latitude = a['latitude']
-	longitude = a['longitude']
+	if len(zipcode) != 5:
+		print('Not a valid zipcode.')
+		exit()
+	elif type(zipcode) != int:
+		nomi = pgeocode.Nominatim('us')
+		a = nomi.query_postal_code(zipcode)
+		latitude = a['latitude']
+		longitude = a['longitude']
+	else:
+		print('Not a valid zipcode.')
+		exit()
 	return(latitude, longitude)
 
 # function to convert coordinates from zipcode/pgeocode to a second set 

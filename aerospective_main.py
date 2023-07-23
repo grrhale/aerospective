@@ -41,10 +41,10 @@ weather_data = dm.weather_data_clean(weather_data_raw['hourly.time'],
 airqual_data = dm.airqual_data_clean(AirNow_data)
 
 # Merge OpenMeteo and AirNow data
-df_aerospective = weather_data.merge(airqual_data, left_on='UTC', right_on='UTC')
+df_aerospective = weather_data.merge(airqual_data, left_on='Date', right_on='Date')
 
 # Visualize our data
 print(df_aerospective)
-chart = sns.barplot(x='UTC', y='AQI', data=df_aerospective.reset_index())
+chart = sns.barplot(x='Date', y='AQI', data=df_aerospective.reset_index())
 chart.set_xticklabels(chart.get_xticklabels(), rotation=90, fontsize=10, horizontalalignment='right')
 plt.show()
