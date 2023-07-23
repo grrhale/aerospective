@@ -10,7 +10,7 @@ import dateutil.relativedelta
 enddate = datetime.datetime.now().date()
 startdate = enddate + dateutil.relativedelta.relativedelta(months=-3)
 
-# function to convert zipcode to coordinates
+# function to convert zipcode to coordinates (takes zip, returns coords)
 def get_location(zipcode):
 	nomi = pgeocode.Nominatim('us')
 	a = nomi.query_postal_code(zipcode)
@@ -18,8 +18,9 @@ def get_location(zipcode):
 	longitude = a['longitude']
 	return(latitude, longitude)
 
-# function to convert coordinates from zipcode to a second set of latlongs,
-# bounding an area of the zipcode location which can be fed to the AirNow API
+# function to convert coordinates from zipcode/pgeocode to a second set 
+#of latlongs, bounding an area of the zipcode location which can be fed 
+# to the AirNow API. (AirNow requires two sets of coordinates)
 def zip_square(latitude, longitude):
 	latmax = (latitude + .5)
 	longmax = (longitude + .5)
@@ -33,7 +34,8 @@ def zip_square(latitude, longitude):
 # AirNow API
 def AirNow_pull(longmin, latmin, longmax, latmax):
 
-	full_coords = [round(longmin, 4), round(latmin, 4), round(longmax, 4), round(latmax, 4)]
+	full_coords = [round(longmin, 4), round(latmin, 4), \
+	round(longmax, 4),round(latmax, 4)]
 	#print(full_coords)
 	
 	url = 'https://www.airnowapi.org/aq/data/?'
@@ -62,6 +64,12 @@ def AirNow_pull(longmin, latmin, longmax, latmax):
 
 	df = pd.DataFrame.from_dict(zip_air_data)
 	
+	if df.shape[0] == 0:
+		print('No EPA data found! If this zipcode is fairly remote,\n'
+		'try using a zipcode closer to a population center or known\n'
+		'monitoring station.')
+		exit()
+	
 	return(df)
 
 # function to pull weather data for the past three months from the National
@@ -70,8 +78,7 @@ def meteo_pull(latitude, longitude):
 	
 	latitude = latitude
 	longitude = longitude
-	
-	# https://archive-api.open-meteo.com/v1/archive?latitude=38.13&longitude=-85.57&start_date=2023-04-22&end_date=2023-07-22&hourly=temperature_2m&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=auto
+
 	url = 'https://archive-api.open-meteo.com/v1/archive?'
 	
 	params = {'latitude':round(latitude, 2),

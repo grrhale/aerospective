@@ -6,6 +6,7 @@
 import pandas as pd
 import seaborn as sns
 import api_module as am
+import data_module as dm
 import csv
 
 # Ask user for area they want data for (zipcode in 5 digit format) 
@@ -24,11 +25,17 @@ AirNow_data = am.AirNow_pull(AirNow_input[0],
 	AirNow_input[2], 
 	AirNow_input[3])
 
-# Pull data from Open Meteo, using the latitude and longitude generated
+# Pull data from OpenMeteo, using the latitude and longitude generated
 # from the user's zipcode
-weather_data = am.meteo_pull(latlong[0], latlong[1])
+weather_data_raw = am.meteo_pull(latlong[0], latlong[1])
 
-print(AirNow_data)
+# Clean the OpenMeteo data to prepare it for merge with AirNow data
+weather_data = dm.weather_data_clean(weather_data_raw['hourly.time'], 
+	weather_data_raw['hourly.temperature_2m'])
+
+# Merge OpenMeteo and AirNow data
+
 print(weather_data)
+print(AirNow_data)
 
 
