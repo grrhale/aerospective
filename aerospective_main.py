@@ -1,25 +1,34 @@
 #  AEROSPECTIVE
 #  Data pulled from:
-#  EPA government AirNow API: https://www.airnow.gov/
-#  and from the National Weather Service API: https://api.weather.gov/
+#  EPA government AirNow API (Air Quality): https://www.airnow.gov/
+#  Open Meteo (Historical temperature data): https://open-meteo.com/
 
 import pandas as pd
 import seaborn as sns
 import api_module as am
+import csv
 
-# Ask user 
+# Ask user for area they want data for (zipcode in 5 digit format) 
 user_zip = input(f'Please enter your zipcode (#####): ')
 
+# Assign a latitude and longitude to the latlong var from user's input
 latlong = am.get_location(user_zip)
 
-print(latlong)
-print(am.zip_square(latlong[0], latlong[1]))
+# Convert that latitude and longitude into a second lat/long, to meet the
+# AirNow API's requirements to return data
+AirNow_input = am.zip_square(latlong[0], latlong[1])
 
-test_f_input = am.zip_square(latlong[0], latlong[1])
+# Pull data from AirNow, using the second generated latitude/longitude
+AirNow_data = am.AirNow_pull(AirNow_input[0], 
+	AirNow_input[1], 
+	AirNow_input[2], 
+	AirNow_input[3])
 
-AirNow_data = am.AirNow_pull(test_f_input[0], 
-	test_f_input[1], 
-	test_f_input[2], 
-	test_f_input[3])
+# Pull data from Open Meteo, using the latitude and longitude generated
+# from the user's zipcode
+weather_data = am.meteo_pull(latlong[0], latlong[1])
 
 print(AirNow_data)
+print(weather_data)
+
+

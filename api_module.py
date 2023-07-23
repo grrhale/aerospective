@@ -7,6 +7,9 @@ import pandas as pd
 import datetime
 import dateutil.relativedelta
 
+enddate = datetime.datetime.now().date()
+startdate = enddate + dateutil.relativedelta.relativedelta(months=-3)
+
 # function to convert zipcode to coordinates
 def get_location(zipcode):
 	nomi = pgeocode.Nominatim('us')
@@ -31,10 +34,7 @@ def zip_square(latitude, longitude):
 def AirNow_pull(longmin, latmin, longmax, latmax):
 
 	full_coords = [round(longmin, 4), round(latmin, 4), round(longmax, 4), round(latmax, 4)]
-	print(full_coords)
-	
-	enddate = datetime.datetime.now().date()
-	startdate = enddate + dateutil.relativedelta.relativedelta(months=-3)
+	#print(full_coords)
 	
 	url = 'https://www.airnowapi.org/aq/data/?'
 	params = {'startDate':str(startdate)+'T00',
@@ -52,7 +52,7 @@ def AirNow_pull(longmin, latmin, longmax, latmax):
 	
 	transl_table = dict.fromkeys(map(ord, '+'), None)
 	url_parsed_ready = url_parsed.translate(transl_table)
-	print(url_parsed_ready)
+	#print(url_parsed_ready)
 	
 	API_resp = re.get(url_parsed_ready)
 	AirNow_data = API_resp.text
@@ -61,5 +61,38 @@ def AirNow_pull(longmin, latmin, longmax, latmax):
 	zip_air_data = pd.json_normalize(parse_json[0:])
 
 	df = pd.DataFrame.from_dict(zip_air_data)
+	
+	return(df)
+
+# function to pull weather data for the past three months from the National
+# Weather Service API
+def meteo_pull(latitude, longitude):
+	
+	latitude = latitude
+	longitude = longitude
+	
+	# https://archive-api.open-meteo.com/v1/archive?latitude=38.13&longitude=-85.57&start_date=2023-04-22&end_date=2023-07-22&hourly=temperature_2m&temperature_unit=fahrenheit&windspeed_unit=mph&precipitation_unit=inch&timezone=auto
+	url = 'https://archive-api.open-meteo.com/v1/archive?'
+	
+	params = {'latitude':round(latitude, 2),
+	'longitude':round(longitude, 2),
+	'start_date':str(startdate),
+	'end_date':str(enddate),
+	'hourly':'temperature_2m',
+	'temperature_unit':'fahrenheit',
+	'windspeed_unit':'mph',
+	'precipitation_unit':'inch',
+	'timezone':'auto'}
+	
+	url_parsed_ready = url+urllib.parse.urlencode(params, safe='/,')
+	#print(url_parsed_ready)
+	
+	API_resp = re.get(url_parsed_ready)
+	weather_data = API_resp.text
+	parse_json = json.loads(weather_data)
+	
+	zip_weather_data = pd.json_normalize(parse_json)
+	
+	df = pd.DataFrame.from_dict(zip_weather_data)
 	
 	return(df)
