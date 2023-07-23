@@ -1,7 +1,11 @@
-#  AEROSPECTIVE
-#  Data pulled from:
-#  EPA government AirNow API (Air Quality): https://www.airnow.gov/
-#  Open Meteo (Historical temperature data): https://open-meteo.com/
+"""
+ AEROSPECTIVE
+ Data pulled from:
+ EPA government AirNow API (Air Quality): https://www.airnow.gov/
+ Open Meteo (Historical temperature data): https://open-meteo.com/
+ This program relies on United States ZIP codes to draw data; it is
+ currently only useful within the United States.
+"""
 
 import pandas as pd
 import seaborn as sns
@@ -33,9 +37,11 @@ weather_data_raw = am.meteo_pull(latlong[0], latlong[1])
 weather_data = dm.weather_data_clean(weather_data_raw['hourly.time'], 
 	weather_data_raw['hourly.temperature_2m'])
 
+# Clean the AirNow data to prepare it for merge with OpenMeteo data
+airqual_data = dm.airqual_data_clean(AirNow_data)
+
 # Merge OpenMeteo and AirNow data
+df_aerospective = weather_data.merge(airqual_data, left_on='UTC', right_on='UTC')
 
-print(weather_data)
-print(AirNow_data)
-
+print(df_aerospective)
 

@@ -36,7 +36,6 @@ def AirNow_pull(longmin, latmin, longmax, latmax):
 
 	full_coords = [round(longmin, 4), round(latmin, 4), \
 	round(longmax, 4),round(latmax, 4)]
-	#print(full_coords)
 	
 	url = 'https://www.airnowapi.org/aq/data/?'
 	params = {'startDate':str(startdate)+'T00',
@@ -54,7 +53,6 @@ def AirNow_pull(longmin, latmin, longmax, latmax):
 	
 	transl_table = dict.fromkeys(map(ord, '+'), None)
 	url_parsed_ready = url_parsed.translate(transl_table)
-	#print(url_parsed_ready)
 	
 	API_resp = re.get(url_parsed_ready)
 	AirNow_data = API_resp.text
@@ -92,7 +90,6 @@ def meteo_pull(latitude, longitude):
 	'timezone':'auto'}
 	
 	url_parsed_ready = url+urllib.parse.urlencode(params, safe='/,')
-	#print(url_parsed_ready)
 	
 	API_resp = re.get(url_parsed_ready)
 	weather_data = API_resp.text
