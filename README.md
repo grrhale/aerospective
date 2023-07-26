@@ -1,1 +1,3 @@
-# aerospective
+#Aerospective
+
+## How to run:
