@@ -11,7 +11,7 @@ def weather_data_clean(dataframe1, dataframe2):
 	temp_df = pd.DataFrame(temp_list)
 
 	weather_dataframe = pd.concat([date_df, temp_df], axis=1)
-	weather_dataframe.columns=['Date', 'Temperature(°F)']
+	weather_dataframe.columns=['Date', 'Mean Temperature(°F)']
 	
 	weather_dataframe['Date'] = weather_dataframe.apply(lambda x:
 		x['Date'][:-6], axis = 1)
@@ -38,3 +38,13 @@ def airqual_data_clean(dataframe):
 	airqual_dataframe = airqual_dataframe.groupby(['Date']).mean()
 	
 	return(airqual_dataframe)
+	
+# function to find which ten dates have the worst overall temperature and
+# worst overall air quality (highest temp/AQI combination)
+def tenworst_days(dataframe):
+	
+	df_wo_lowtemps = dataframe[~(dataframe['Mean Temperature(°F)'] <= 75)]
+
+	df_AQI_ordered = df_wo_lowtemps.sort_values('AQI')
+	
+	return(df_AQI_ordered.tail(10))
