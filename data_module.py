@@ -48,3 +48,26 @@ def tenworst_days(dataframe):
 	df_AQI_ordered = df_wo_lowtemps.sort_values('AQI')
 	
 	return(df_AQI_ordered.tail(10))
+
+# function to find which ten dates have the best overall temperature and
+# best overall air quality (lowest temp/AQI combination)
+def tenbest_days(dataframe):
+	
+	df_wo_hightemps = dataframe[~(dataframe['Mean Temperature(°F)'] >= 74)]
+
+	df_AQI_ordered = df_wo_hightemps.sort_values('AQI', ascending=False)
+# ascending is set to false so the best date will be plotted on the right
+# side of our output graph
+	return(df_AQI_ordered.tail(10))
+	
+# function to find which of 3 possible 30 day spans have the best overall
+# AQI and temperature combination
+def best30(dataframe):
+	first_30 = dataframe[0:31]
+	second_30 = dataframe[31:62]
+	third_30 = dataframe[62:93]
+	
+	first_30_ranked = first_30[['AQI','Mean Temperature(°F)']].mean()
+	first_30_title = list(first_30.index[0]) # first_30.iloc[0, 31]
+	
+	return(first_30_ranked, first_30_title)
