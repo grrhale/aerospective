@@ -115,7 +115,7 @@ def meteo_pull(latitude, longitude):
 	
 	# assign url to var
 	url_parsed_ready = url+urllib.parse.urlencode(params, safe='/,')
-	
+
 	# get data, load it into a dataframe, and return it
 	API_resp = re.get(url_parsed_ready)
 	weather_data = API_resp.text

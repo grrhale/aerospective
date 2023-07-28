@@ -35,6 +35,8 @@ def airqual_data_clean(dataframe):
 	airqual_dataframe.columns=['Date', 'AQI']
 	airqual_dataframe['Date'] = airqual_dataframe.apply(lambda x:
 		x['Date'][:-6], axis = 1)
+		
+	airqual_dataframe = airqual_dataframe[airqual_dataframe.AQI > 0]
 	airqual_dataframe = airqual_dataframe.groupby(['Date']).mean()
 	
 	return(airqual_dataframe)
@@ -60,14 +62,21 @@ def tenbest_days(dataframe):
 # side of our output graph
 	return(df_AQI_ordered.tail(10))
 	
-# function to find which of 3 possible 30 day spans have the best overall
-# AQI and temperature combination
+# function to calculate the mean temperature and AQI of three
+# thirty day spans received in three months of data. this will be used to
+# plot which thirty day span has the overall lowest mean AQI/mean temp
 def best30(dataframe):
 	first_30 = dataframe[0:31]
 	second_30 = dataframe[31:62]
 	third_30 = dataframe[62:93]
 	
 	first_30_ranked = first_30[['AQI','Mean Temperature(°F)']].mean()
-	first_30_title = list(first_30.index[0]) # first_30.iloc[0, 31]
+	first_30_ranked['Date'] = first_30.index[0], 'to', first_30.index[-1]
 	
-	return(first_30_ranked, first_30_title)
+	second_30_ranked = second_30[['AQI','Mean Temperature(°F)']].mean()
+	second_30_ranked['Date'] = second_30.index[0], 'to', second_30.index[-1]
+	
+	third_30_ranked = third_30[['AQI','Mean Temperature(°F)']].mean()
+	third_30_ranked['Date'] = third_30.index[0], 'to', third_30.index[-1]
+	
+	return(first_30_ranked, second_30_ranked, third_30_ranked)

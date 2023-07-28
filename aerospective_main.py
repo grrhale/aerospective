@@ -47,6 +47,9 @@ df_aerospective = weather_data.merge(airqual_data, left_on='Date', right_on='Dat
 vm.plot_days(df_aerospective, user_zip, 0)
 # create figure for the days with the best aqi/temp in the past three months
 vm.plot_days(df_aerospective, user_zip, 1)
-
-print(dm.best30(df_aerospective))
+# create figure ranking the past three 30 day spans by AQI/temp
+vm.plot_30d_spans(dm.best30(df_aerospective)[0], 
+	dm.best30(df_aerospective)[1], 
+	dm.best30(df_aerospective)[2], 
+	user_zip)
 

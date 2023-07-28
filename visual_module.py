@@ -54,4 +54,46 @@ def plot_days(df, zipcode, a):
 	plt.legend(bbox_to_anchor=(1.05, 1), handles=[AQI_leg, mtemp_leg], frameon=False)
 	plt.tight_layout()
 	plt.show()
+	
+def plot_30d_spans(s1, s2, s3, zipcode):
+	
+	title = 'The past three months (in 30 day spans) ranked by best\noverall AQI and temperature in/around zipcode ' + zipcode
+	
+	# finalize data arrangement: sort by AQI
+	data = pd.DataFrame([s1, s2, s3])
+	data = data.sort_values('AQI')
+	data = data.replace(',','', regex=True)
+	
+	chart = sns.barplot(x=data['Date'], 
+		y=data['AQI'], 
+		color='b')
+	
+	chart.set(title = title)
 
+	# calculate scaling to put temp/AQI in the same chart
+	width_scale = 0.45
+	for bar in chart.containers[0]:
+		bar.set_width(bar.get_width() * width_scale)
+
+	chart2 = chart.twinx()
+	sns.barplot(x=data['Date'], 
+		y=data['Mean Temperature(°F)'], 
+		alpha=0.7, 
+		ax=chart2, 
+		color='r')
+
+	for bar in chart2.containers[0]:
+		x = bar.get_x()
+		w = bar.get_width()
+		bar.set_x(x+w * (1- width_scale))
+		bar.set_width(w * width_scale)
+	
+	# set tick label configuration
+	chart.set_xticklabels(chart.get_xticklabels(), rotation=45, fontsize=10, horizontalalignment='right')
+
+	# manually set up legend so colors and labels make sense, then plot
+	AQI_leg = Line2D([],[],color='blue', label='AQI')
+	mtemp_leg = Line2D([],[],color='lightcoral', label='Mean Temp')
+	plt.legend(bbox_to_anchor=(1.05, 1), handles=[AQI_leg, mtemp_leg], frameon=False)
+	plt.tight_layout()
+	plt.show()
