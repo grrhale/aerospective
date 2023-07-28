@@ -51,7 +51,7 @@ def plot_days(df, zipcode, a):
 	# manually set up legend so colors and labels make sense, then plot
 	AQI_leg = Line2D([],[],color='blue', label='AQI')
 	mtemp_leg = Line2D([],[],color='lightcoral', label='Mean Temp')
-	plt.legend(bbox_to_anchor=(1.05, 1), handles=[AQI_leg, mtemp_leg], frameon=False)
+	plt.legend(bbox_to_anchor=(1.05, 1), handles=[AQI_leg, mtemp_leg], frameon=False, borderaxespad=2.5)
 	plt.tight_layout()
 	plt.show()
 	
@@ -94,6 +94,6 @@ def plot_30d_spans(s1, s2, s3, zipcode):
 	# manually set up legend so colors and labels make sense, then plot
 	AQI_leg = Line2D([],[],color='blue', label='AQI')
 	mtemp_leg = Line2D([],[],color='lightcoral', label='Mean Temp')
-	plt.legend(bbox_to_anchor=(1.05, 1), handles=[AQI_leg, mtemp_leg], frameon=False)
+	plt.legend(bbox_to_anchor=(1.05, 1), handles=[AQI_leg, mtemp_leg], frameon=False, borderaxespad=2.5)
 	plt.tight_layout()
 	plt.show()

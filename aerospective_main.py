@@ -6,7 +6,6 @@
  This program relies on United States ZIP codes to draw data; it is
  currently only useful within the United States.
 """
-import pandas as pd
 import api_module as am
 import data_module as dm
 import visual_module as vm
