@@ -22,12 +22,10 @@ It may be easiest to run Aerospective in a python virtual environment so you do 
 
 The 'requirements.txt' file contains all dependencies necessary to run this program, and the above instructions will ensure you have them. If you do not wish to set up a venv, the following dependencies are required to be installed through 'pip':
 - pgeocode
-- urllib
 - requests
-- json
 - pandas
 - datetime
-- dateutil
+- seaborn
 
 Once these are installed, there is one final step to run aerospective. An API key is required to interface with the EPA's API. You either will have already received the 'config.py' file from me, or you may create your own key. To create your own key, visit the EPA's AirNow website here: https://docs.airnowapi.org/login?index= 
 1) Create an account. You will be provided a key upon account creation. 
