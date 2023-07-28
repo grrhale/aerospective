@@ -12,7 +12,7 @@ Due to OpenMeteo API limitations, the data generated always ends on the date 7 d
 
 It may be easiest to run Aerospective in a python virtual environment so you do not have to install all dependencies in your primary environment. Here are the steps to do that:
 
-1) Navigated to the directory you have cloned this repository to in your CLI.
+1) Navigate to the directory you have cloned this repository to in your CLI.
 2) Run 'python -m venv venv' in that directory.
 3) Activate the virtual environment by running
 './venv/Scripts/activate' on Mac or Linux, or by running 'venv\scripts\activate.bat' on Windows.
