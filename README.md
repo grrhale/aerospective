@@ -1,5 +1,13 @@
 # Aerospective
 
+## What Aerospective does:
+
+Aerospective is meant to provide a simple recap of the best and worst days to have been outside in a given area in the recent past. To do this, the program generates three bar graphs. The first ranks the ten worst
+days to have been outside in the last three months (by mean air quality index measured in PM2.5, from the EPA API, and high mean temperatures, from the OpenMeteo API). The second ranks the ten best days to have
+been outside, by the same metrics as the first. The third ranks the previous 3 thirty day intervals by the same metrics, prioritizing AQI.
+
+Due to OpenMeteo API limitations, the data generated always ends on the date 7 days before the program was run, and begins 90 days before that. OpenMeteo does not provide the most recent 7 days of temperature.
+
 ## How to run:
 
 It may be easiest to run Aerospective in a python virtual environment so you do not have to install all dependencies in your primary environment. Here are the steps to do that:
