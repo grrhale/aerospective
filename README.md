@@ -52,4 +52,4 @@ simply provide the five digit zipcode (aerospective currently relies on the Amer
 3) A ranking of the previous 90 days, divided into 30 day periods, of which period had the overall highest and overall lowest AQI, with mean temperature shown, represented as a bar graph. The 30 day periods are ranked from left to right, best to worst.
 ![alt_text](https://i.imgur.com/lOXqhO4.png)
 
-Should you present an area code without any reasonably close air monitoring stations, Aerospective will recognize this and advise you to run the program again with another zipcode. Most reasonably sized towns have at least one monitoring station.
+Should you provide a zipcode without any reasonably close air monitoring stations, Aerospective will recognize this and advise you to run the program again with another zipcode. Most reasonably sized towns have at least one monitoring station.
